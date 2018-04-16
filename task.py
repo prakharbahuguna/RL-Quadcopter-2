@@ -29,8 +29,8 @@ class Task():
     def get_reward(self):
         """Uses current pose of sim to return reward."""
         z_distance_penalty = abs(self.sim.pose[2] - self.target_pos[2])
-        angle_penalty = np.sum(np.absolute(self.sim.pose[3:]))
         stray_penalty = np.sum(np.absolute(self.sim.pose[:2] - self.target_pos[:2]))
+        angle_penalty = (np.arctan2(np.linalg.norm(np.cross(self.sim.pose[:3], self.target_pos[:3])), np.dot(self.sim.pose[:3], self.target_pos[:3])) / np.pi - 1) / 2
 
         return 1 - .0005*(z_distance_penalty) - .0003*(stray_penalty) - .0001*(angle_penalty)
 
